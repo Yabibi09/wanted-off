@@ -1,11 +1,8 @@
-import { initializeApp } from "firebase/app";
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyC7mj6LzGEzlm3mxRilUMtvAKc-PmG_cj0",
+  authDomain: "nurse-off.firebaseapp.com",
+  projectId: "nurse-off",
+  storageBucket: "nurse-off.appspot.com",
+  messagingSenderId: "754923113150",
+  appId: "1:754923113150:web:94f069f252260edcdfecef"
 };
-const app = initializeApp(firebaseConfig);
-export default app;
