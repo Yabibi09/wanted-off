@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import app from "./firebase";
 import 'react-calendar/dist/Calendar.css';
+import './calendar.css';
 
-export default function CalendarComponent() {
+const db = getFirestore(app);
+
+export default function CalendarComponent({ user }) {
   const [selectedDates, setSelectedDates] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   const toggleDate = (date) => {
     const dateStr = date.toISOString().slice(0, 10);
@@ -20,6 +26,34 @@ export default function CalendarComponent() {
     }
   };
 
+  const handleSubmit = async () => {
+    for (const dateStr of selectedDates) {
+      const ref = doc(db, "offRequests", dateStr);
+      const snap = await getDoc(ref);
+      let current = [];
+
+      if (snap.exists()) {
+        current = snap.data().applicants || [];
+        if (current.includes(user.email)) continue;
+        if (current.length >= 3) {
+          alert(`${dateStr}는 이미 마감되었습니다.`);
+          continue;
+        }
+        await updateDoc(ref, {
+          applicants: arrayUnion(user.email)
+        });
+      } else {
+        await setDoc(ref, {
+          applicants: [user.email]
+        });
+      }
+    }
+
+    setSubmitted(true);
+    alert("신청이 완료되었습니다.");
+    setSelectedDates([]);
+  };
+
   return (
     <div>
       <Calendar
@@ -30,6 +64,9 @@ export default function CalendarComponent() {
         }}
       />
       <p>선택한 날짜: {selectedDates.map(d => d.slice(5)).join(", ")}</p>
+      <button onClick={handleSubmit} disabled={selectedDates.length === 0 || submitted}>
+        오프 신청하기
+      </button>
     </div>
   );
 }

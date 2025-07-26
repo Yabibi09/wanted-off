@@ -12,7 +12,7 @@ function App() {
       ) : (
         <>
           <h3>{user.email}님, 환영합니다</h3>
-          <CalendarComponent />
+          <CalendarComponent user={user} />
           <button onClick={() => setUser(null)}>로그아웃</button>
         </>
       )}
