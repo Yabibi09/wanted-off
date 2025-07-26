@@ -7,15 +7,7 @@ function App() {
 
   return (
     <div>
-      {!user ? (
-        <Login onLogin={setUser} />
-      ) : (
-        <>
-          <h3>{user.email}님, 환영합니다</h3>
-          <CalendarComponent user={user} />
-          <button onClick={() => setUser(null)}>로그아웃</button>
-        </>
-      )}
+      {user ? <CalendarComponent user={user} /> : <Login onLogin={setUser} />}
     </div>
   );
 }

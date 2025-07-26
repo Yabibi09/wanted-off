@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import app from "./firebase";
+
+const auth = getAuth(app);
 
 export default function Login({ onLogin }) {
   const [name, setName] = useState("");
@@ -9,7 +11,7 @@ export default function Login({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = `${name.toLowerCase()}@nurse.com`;
+    const email = \`\${name.toLowerCase()}@nurse.com\`;
 
     try {
       let userCredential;
@@ -31,20 +33,8 @@ export default function Login({ onLogin }) {
     <div>
       <h2>{isSignUp ? "회원가입" : "로그인"}</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="이름"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="text" placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">{isSignUp ? "회원가입" : "로그인"}</button>
       </form>
       <p>

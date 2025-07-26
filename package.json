@@ -1,12 +1,12 @@
 {
-  "name": "nurse-off-extended",
+  "name": "wanted-off",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "firebase": "^10.7.1",
-    "react": "^18.2.0",
-    "react-calendar": "^4.2.1",
-    "react-dom": "^18.2.0",
+    "firebase": "^9.0.0",
+    "react": "^18.0.0",
+    "react-calendar": "^3.8.0",
+    "react-dom": "^18.0.0",
     "react-scripts": "5.0.1"
   },
   "scripts": {
