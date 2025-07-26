@@ -1,2 +1,2 @@
-# Nurse Off Request App
-A simple React + Firebase app for nurse day-off scheduling.
+# Nurse Off Request Complete
+This is the complete nurse off request app with multi-date selection and Firebase integration.

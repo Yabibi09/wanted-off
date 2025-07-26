@@ -1,8 +1,10 @@
-.react-calendar {
-  width: 100%;
-  max-width: 500px;
-  margin: auto;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.selected-date {
+  background: #339CFF !important;
+  color: white !important;
+  border-radius: 50%;
+}
+.submitted-date {
+  background: #d1eaff !important;
+  color: #007BFF !important;
+  border-radius: 50%;
 }
