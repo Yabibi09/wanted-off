@@ -1,12 +1,13 @@
+// firebase.js
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC7mj6LzGEzlm3mxRilUMtvAKc-PmG_cj0",
-  authDomain: "nurse-off.firebaseapp.com",
-  projectId: "nurse-off",
-  storageBucket: "nurse-off.appspot.com",
-  messagingSenderId: "754923113150",
-  appId: "1:754923113150:web:94f069f252260edcdfecef"
+  apiKey: "너의 키",
+  authDomain: "너의 도메인",
+  projectId: "너의 ID",
+  storageBucket: "너의 버킷",
+  messagingSenderId: "너의 ID",
+  appId: "너의 App ID"
 };
 
 const app = initializeApp(firebaseConfig);
