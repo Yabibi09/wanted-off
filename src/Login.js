@@ -56,5 +56,4 @@ export default function Login({ onLogin }) {
         </button>
       </p>
     </div>
-  );
 }
