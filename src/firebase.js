@@ -9,5 +9,4 @@ const firebaseConfig = {
   appId: "1:754923113150:web:94f069f252260edcdfecef"
 };
 
-const app = initializeApp(firebaseConfig);
-export default app;
+export const app = initializeApp(firebaseConfig);

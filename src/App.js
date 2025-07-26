@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Login from "./Login";
 import CalendarComponent from "./CalendarComponent";
+import Login from "./Login";
 
-function App() {
+export default function App() {
   const [user, setUser] = useState(null);
 
   return (
@@ -11,5 +11,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

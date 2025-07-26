@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import app from "./firebase";
+import { app } from "./firebase";
 
 const auth = getAuth(app);
 
@@ -11,7 +11,7 @@ export default function Login({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = \`\${name.toLowerCase()}@nurse.com\`;
+    const email = `${name.toLowerCase()}@nurse.com`;
 
     try {
       let userCredential;
@@ -39,9 +39,7 @@ export default function Login({ onLogin }) {
       </form>
       <p>
         {isSignUp ? "계정이 이미 있으신가요?" : "처음이신가요?"}{" "}
-        <button onClick={() => setIsSignUp(!isSignUp)}>
-          {isSignUp ? "로그인으로" : "회원가입으로"}
-        </button>
+        <button onClick={() => setIsSignUp(!isSignUp)}>{isSignUp ? "로그인으로" : "회원가입으로"}</button>
       </p>
     </div>
   );
