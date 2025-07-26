@@ -1,14 +1,16 @@
-// firebase.js
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "너의 키",
-  authDomain: "너의 도메인",
-  projectId: "너의 ID",
-  storageBucket: "너의 버킷",
-  messagingSenderId: "너의 ID",
-  appId: "너의 App ID"
+  apiKey: "AIzaSyC7mj6LzGEzlm3mxRilUMtvAKc-PmG_cj0",
+  authDomain: "nurse-off.firebaseapp.com",
+  projectId: "nurse-off",
+  storageBucket: "nurse-off.firebasestorage.app",
+  messagingSenderId: "754923113150",
+  appId: "1:754923113150:web:94f069f252260edcdfecef"
 };
 
 const app = initializeApp(firebaseConfig);
-export default app;
+const auth = getAuth(app);
+
+export { auth };

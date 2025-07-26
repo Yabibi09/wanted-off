@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import app from "./firebase";
-
-const auth = getAuth(app);
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
 
 export default function Login({ onLogin }) {
   const [name, setName] = useState("");
