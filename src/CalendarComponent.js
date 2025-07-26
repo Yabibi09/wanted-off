@@ -1,90 +1,112 @@
-import React, { useState, useEffect } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { db } from "./firebase";
-import { collection, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+// 수정된 CalendarComponent.js 예시 (정상 빌드 가능하도록 마감 및 쉼표 정리 포함)
 
-export default function CalendarComponent({ user }) {
+import React, { useState, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import './CalendarComponent.css';
+import { db } from './firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useAuth } from './AuthContext';
+
+const CalendarComponent = () => {
+  const { currentUser } = useAuth();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [submittedDates, setSubmittedDates] = useState([]);
+  const [userOffDates, setUserOffDates] = useState([]);
+  const [allOffData, setAllOffData] = useState({});
 
-  const fetchDates = async () => {
-    const info = [];
-    const subs = [];
-    const start = new Date();
-    for (let i = 0; i < 60; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      const ds = d.toISOString().slice(0,10);
-      const ref = doc(db, "offRequests", ds);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        const apps = snap.data().applicants || [];
-        if (apps.includes(user.email.split('@')[0])) subs.push(ds);
-        info.push({ date: ds, count: apps.length });
+  const userId = currentUser?.email?.split('@')[0];
+
+  const fetchOffData = async () => {
+    if (!userId) return;
+    const docRef = doc(db, 'offData', userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data().dates || [];
+      setUserOffDates(data);
+      setSelectedDates(data);
+    }
+
+    // Load all users' data
+    const allUsersRef = doc(db, 'offData', '__all__');
+    const allSnap = await getDoc(allUsersRef);
+    if (allSnap.exists()) {
+      setAllOffData(allSnap.data());
+    }
+  };
+
+  useEffect(() => {
+    fetchOffData();
+  }, [userId]);
+
+  const handleDateChange = (date) => {
+    const timestamp = date.getTime();
+    const isSelected = selectedDates.some(d => new Date(d).getTime() === timestamp);
+
+    let newDates;
+    if (isSelected) {
+      newDates = selectedDates.filter(d => new Date(d).getTime() !== timestamp);
+    } else {
+      if (selectedDates.length >= 3) {
+        alert('최대 3일까지만 선택할 수 있습니다.');
+        return;
+      }
+      const dateStr = date.toISOString().split('T')[0];
+      const dateKey = dateStr;
+      const count = Object.values(allOffData).filter(arr => arr.includes(dateKey)).length;
+      if (count >= 3) {
+        alert(`${dateStr}에는 이미 3명의 오프 신청이 있습니다.`);
+        return;
+      }
+      newDates = [...selectedDates, date];
+    }
+
+    setSelectedDates(newDates);
+  };
+
+  const saveOffDates = async () => {
+    const formattedDates = selectedDates.map(d => d.toISOString().split('T')[0]);
+    await setDoc(doc(db, 'offData', userId), { dates: formattedDates });
+
+    const allDocRef = doc(db, 'offData', '__all__');
+    const allSnap = await getDoc(allDocRef);
+    const allData = allSnap.exists() ? allSnap.data() : {};
+    allData[userId] = formattedDates;
+    await setDoc(allDocRef, allData);
+    alert('오프가 저장되었습니다.');
+  };
+
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      const dateStr = date.toISOString().split('T')[0];
+      const count = Object.values(allOffData).filter(arr => arr.includes(dateStr)).length;
+      if (selectedDates.some(d => new Date(d).toISOString().split('T')[0] === dateStr)) {
+        return 'selected';
+      }
+      if (count >= 3) {
+        return 'disabled';
       }
     }
-    setSubmittedDates(subs);
-  };
-
-  useEffect(() => { fetchDates(); }, [user]);
-
-  const onClickDay = async (date) => {
-    const ds = date.toISOString().slice(0,10);
-    const already = selectedDates.includes(ds);
-    if (already) {
-      setSelectedDates(prev => prev.filter(d => d !== ds));
-      return;
-    }
-    if (selectedDates.length >= 3) {
-      alert("최대 3일까지만 선택 가능합니다.");
-      return;
-    }
-    const ref = doc(db, "offRequests", ds);
-    const snap = await getDoc(ref);
-    const apps = snap.exists() ? snap.data().applicants || [] : [];
-    if (!apps.includes(user.email.split('@')[0]) && apps.length >= 3) {
-      alert("이미 3명이 신청했습니다.");
-      return;
-    }
-    setSelectedDates(prev => [...prev, ds]);
-  };
-
-  const handleSubmit = async () => {
-    for (const ds of selectedDates) {
-      const ref = doc(db, "offRequests", ds);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        await updateDoc(ref, { applicants: arrayUnion(user.email.split('@')[0]) });
-      } else {
-        await setDoc(ref, { applicants: [user.email.split('@')[0]] });
-      }
-    }
-    setSelectedDates([]);
-    fetchDates();
-    alert("신청 완료!");
-  };
-
-  const tileClassName = ({ date }) => {
-    const ds = date.toISOString().slice(0,10);
-    if (submittedDates.includes(ds)) return "submitted-date";
-    if (selectedDates.includes(ds)) return "selected-date";
-    return "";
-  };
-
-  const tileContent = ({ date }) => {
-    const ds = date.toISOString().slice(0,10);
-    return (
-      <p style={{ fontSize: '0.7em', margin: 0 }}>
-        {/* count display */}
-      </p>
-    );
+    return null;
   };
 
   return (
-    <div>
-      <Calendar onClickDay={onClickDay} tileClassName={tileClassName} tileContent={tileContent} />
-      <p>선택된 날짜: {selectedDates.join(", ")}</p>
-      <p>신청 내역: {submittedDates.join(", ")}</p>
-      <button onClick={handleSubmit} disabled={selectedDates.length===0}>오프 신청하기</button>
+    <div className="calendar-container">
+      <h2>{userId} 님의 오프 신청</h2>
+      <Calendar
+        onClickDay={handleDateChange}
+        value={null}
+        tileClassName={tileClassName}
+      />
+      <button onClick={saveOffDates}>신청 저장</button>
+      <h4>선택된 날짜:</h4>
+      <ul>
+        {selectedDates.map((d, idx) => (
+          <li key={idx}>{d.toISOString().split('T')[0]}</li>
+        ))}
+      </ul>
     </div>
+  );
+};
+
+export default CalendarComponent;
