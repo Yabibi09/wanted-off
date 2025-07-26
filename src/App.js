@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Login from "./Login";
+import CalendarComponent from "./CalendarComponent";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -9,10 +10,11 @@ function App() {
       {!user ? (
         <Login onLogin={setUser} />
       ) : (
-        <div>
-          <h1>{user.email}님, 로그인 되었습니다.</h1>
+        <>
+          <h3>{user.email}님, 환영합니다</h3>
+          <CalendarComponent />
           <button onClick={() => setUser(null)}>로그아웃</button>
-        </div>
+        </>
       )}
     </div>
   );
