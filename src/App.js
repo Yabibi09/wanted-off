@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import CalendarComponent from "./CalendarComponent";
 import Login from "./Login";
+import CalendarComponent from "./CalendarComponent";
 
-export default function App() {
+function App() {
   const [user, setUser] = useState(null);
-
-  return (
-    <div>
-      {user ? <CalendarComponent user={user} /> : <Login onLogin={setUser} />}
-    </div>
-  );
+  return user ? <CalendarComponent user={user} /> : <Login onLogin={setUser} />;
 }
+export default App;
