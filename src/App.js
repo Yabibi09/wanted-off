@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import Login from "./Login";
 
 function App() {
+  const [user, setUser] = useState(null);
+
   return (
     <div>
-      <h1>간호사 오프 신청 시스템</h1>
-      <p>이 페이지는 정상 작동 중입니다.</p>
+      {!user ? (
+        <Login onLogin={setUser} />
+      ) : (
+        <div>
+          <h1>{user.email}님, 로그인 되었습니다.</h1>
+          <button onClick={() => setUser(null)}>로그아웃</button>
+        </div>
+      )}
     </div>
   );
 }
