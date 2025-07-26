@@ -1,0 +1,11 @@
+.calendar {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.calendar .selected-dates {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #333;
+}
