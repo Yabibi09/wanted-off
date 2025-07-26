@@ -1,16 +1,17 @@
 {
-  "name": "nurse-off-complete",
+  "name": "nurse-off",
   "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "firebase": "^10.7.1",
-    "react": "^18.2.0",
-    "react-calendar": "^4.2.1",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^10.12.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }
